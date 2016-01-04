@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:composition template="_template.xhtml">
+		<ui:define name="content">
+			<h:form id="category">
+			<p:messages id="messageName" autoUpdate="true"/>
+			<p:fieldset legend="Category Data">
+				
+				<h:panelGrid columns="3">
+					<h:outputLabel value="Name :" for="catgName"/>
+					<p:inputText id="catgName" value="#{categoryBean.category.catgName}"
+						required="true" requiredMessage="Name required"
+						validatorMessage="Name cannot be less than 5">
+						<f:validateLength minimum="5" />
+						<f:ajax event="blur" render="messageName" />
+					</p:inputText>
+					<h:commandButton value="Save" action="#{categoryBean.save}" />
+				</h:panelGrid>
+			</p:fieldset>
+			</h:form>
+
+			<p:dataTable value="#{categoryBean.categories}" var="category" id="categoriesTable" 
+			paginator="true" rows="4" emptyMessage="No category" style="position:relative;"
+			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+				<p:column>
+					<f:facet name="header">Category</f:facet>
+					<h:outputText value="#{category.catgName}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">Actions</f:facet>
+					<p:commandButton icon="ui-icon-pencil" />
+					<p:commandButton icon="ui-icon-trash" />
+				</p:column>
+			</p:dataTable>
+			
+		</ui:define>
+	</ui:composition>
+</html>
