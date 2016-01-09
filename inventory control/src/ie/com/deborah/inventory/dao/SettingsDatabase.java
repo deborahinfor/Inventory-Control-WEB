@@ -9,6 +9,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 /**
  * This class is responsible for creating the tables in the database, and insert initial data.
@@ -21,7 +23,9 @@ public class SettingsDatabase {
 
 	public static void main(String[] args) {
 		
-		EntityManager em = new JPAUtil().getEntityManager();
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("inventory");
+		
+		EntityManager em = factory.createEntityManager();
 
 		em.getTransaction().begin();
 

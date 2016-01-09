@@ -1,9 +1,10 @@
 package ie.com.deborah.inventory.bean;
 
+import ie.com.deborah.inventory.dao.CategoryDAO;
+import ie.com.deborah.inventory.dao.ProductDAO;
 import ie.com.deborah.inventory.model.Category;
 import ie.com.deborah.inventory.model.Product;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -15,6 +16,9 @@ import javax.faces.bean.ManagedBean;
  */
 @ManagedBean
 public class ProductBean {
+
+	private ProductDAO dao = new ProductDAO();
+	private CategoryDAO catDao = new CategoryDAO();
 	private Product product = new Product();
 	
 	public Product getProduct() {
@@ -22,16 +26,15 @@ public class ProductBean {
 	}
 	
 	public String save(){
+		dao.persiste(product);
 		return "product?faces-redirect=true";
 	}
 	
 	public List<Category> getCategories(){
-		List<Category> categories = new ArrayList<Category>();
-		return categories;
+		return catDao.categories();
 	}
 	
 	public List<Product> getProducts(){
-		List<Product> products = new ArrayList<Product>();
-		return products;
+		return dao.products();
 	}
 }

@@ -27,16 +27,16 @@
 	        			<p:spinner id="prodQuantity" value="#{productBean.product.prodQuantity}" min="0" max="100" />					
 
 						<h:outputLabel value="Value Unitary" for="prodUnitaryValue" />
-						<p:inputText id="prodUnitaryValue" value="0.0"/>  
+						<p:inputText id="prodUnitaryValue" value="#{productBean.product.prodUnitaryValue}"/>  
 
 						<h:outputLabel value="Date" for="prodEditionDate" />
 						<p:calendar id="prodEditionDate" value="#{productBean.product.prodEditionDate.time}" pattern="dd/MM/yyyy"
 									timeZone="Europe/Dublin" />
 
 						<h:outputLabel value="Category" for="category" />
-						<p:selectOneMenu id="category" value="#{productBean.product.category}" >
+						<p:selectOneMenu id="category" value="#{productBean.product.category}" converter="categoryConverter"  >
 							<f:selectItems value="#{productBean.categories}" var="catg"
-								itemLabel="#{catg.catgName}" itemValue="#{catg.catgId}" />
+								itemLabel="#{catg.catgName}" itemValue="#{catg}" />
 						</p:selectOneMenu>
 
 						<p:commandButton value="Save" action="#{productBean.save}">
