@@ -5,7 +5,11 @@ import ie.com.deborah.inventory.model.Category;
 
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
+
+import org.primefaces.event.RowEditEvent;
 
 /**
  * @author Deborah Lima
@@ -30,4 +34,21 @@ public class CategoryBean {
 	public List<Category> getCategories(){
 		return dao.categories();
 	}
+	
+	public String remove(Category catg){
+		dao.remove(catg);
+		return "category?faces-redirect=true";
+	}
+	
+	public void onRowEdit(RowEditEvent event) {
+		Category catg = (Category) event.getObject();
+		dao.persiste(catg);
+        FacesMessage msg = new FacesMessage("Category Edited", ((Category) event.getObject()).getCatgName());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+     
+    public void onRowCancel(RowEditEvent event) {
+    	FacesMessage msg = new FacesMessage("Edit Cancelled", ((Category) event.getObject()).getCatgName());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
 }

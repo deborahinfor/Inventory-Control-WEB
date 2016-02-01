@@ -25,20 +25,33 @@
 			</p:fieldset>
 			</h:form>
 
-			<p:dataTable value="#{categoryBean.categories}" var="category" id="categoriesTable" 
-			paginator="true" rows="4" emptyMessage="No category" style="position:relative;"
-			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
-				<p:column>
-					<f:facet name="header">Category</f:facet>
-					<h:outputText value="#{category.catgName}"/>
-				</p:column>
-				<p:column>
-					<f:facet name="header">Actions</f:facet>
-					<p:commandButton icon="ui-icon-pencil" />
-					<p:commandButton icon="ui-icon-trash" />
-				</p:column>
-			</p:dataTable>
-			
+			<h:form id="formEditCatg">
+				<p:growl id="msgs" showDetail="true"/>
+				
+				<p:dataTable value="#{categoryBean.categories}" var="catTable" id="categoriesTable" 
+				paginator="true" rows="4" emptyMessage="No category" style="position:relative;"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				editable="true">
+					<p:ajax event="rowEdit" listener="#{categoryBean.onRowEdit}" update=":formEditCatg:msgs" />
+	       			<p:ajax event="rowEditCancel" listener="#{categoryBean.onRowCancel}" update=":formEditCatg:msgs" />
+					
+					<p:column headerText="Category">
+						<p:cellEditor>
+							<f:facet name="output"><h:outputText value="#{catTable.catgName}"/></f:facet>
+							<f:facet name="input"><p:inputText value="#{catTable.catgName}" label="Category" /></f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column style="width:32px">
+						<p:rowEditor />
+	       			</p:column>
+					
+					<p:column style="width:32px">
+						<p:commandLink styleClass="ui-icon ui-icon-trash" action="#{categoryBean.remove(catTable)}"  update="categoriesTable"/>						
+					</p:column>
+					
+				</p:dataTable>
+			</h:form>
 		</ui:define>
 	</ui:composition>
 </html>

@@ -45,52 +45,77 @@
 				</p:fieldset>
 			</h:form>
 
-			<p:dataTable value="#{productBean.products}" var="product" id="productsTable" 
-			paginator="true" rows="4" emptyMessage="No product" style="position:relative;"
-			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+			<h:form id="formEditProd">
+   				<p:growl id="msgs" showDetail="true"/>
 
-				<p:column>
-					<f:facet name="header">Name</f:facet>
-					<h:outputText value="#{product.prodName}"/>
-				</p:column>
-
-				<p:column>
-					<f:facet name="header">Description</f:facet>
-					<h:outputText value="#{product.prodDescription}"/>
-				</p:column>
-
-				<p:column>
-					<f:facet name="header">Quantity</f:facet>
-					<h:outputText value="#{product.prodQuantity}"/>
-				</p:column>
-
-				<p:column>
-					<f:facet name="header">Value Unitary</f:facet>
-					<h:outputText value="#{product.prodUnitaryValue}">
-					<f:convertNumber type="currency" pattern="EUR #0.00"
-							currencySymbol="EUR" locale="en_GB" />
-					</h:outputText>
-				</p:column>
-
-				<p:column>
-					<f:facet name="header">Date</f:facet>
-					<h:outputText value="#{product.prodEditionDate.time}">
-						<f:convertDateTime pattern="dd/MM/yyyy"
-							timeZone="Europe/Dublin" />
-					</h:outputText>
-				</p:column>
-
-				<p:column>
-					<f:facet name="header">Category</f:facet>
-					<h:outputText value="#{product.category.catgName}"/>
-				</p:column>
-
-				<p:column>
-					<f:facet name="header">Actions</f:facet>
-					<p:commandButton icon="ui-icon-pencil" />
-					<p:commandButton icon="ui-icon-trash" />
-				</p:column>
-			</p:dataTable>
+				<p:dataTable id="productsTable" value="#{productBean.products}" var="product" 
+				paginator="true" rows="10" emptyMessage="No product" style="position:relative;"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				editable="true">
+					<p:ajax event="rowEdit" listener="#{productBean.onRowEdit}" update=":formEditProd:msgs" />
+	       			<p:ajax event="rowEditCancel" listener="#{productBean.onRowCancel}" update=":formEditProd:msgs" />
+					
+					<p:column headerText="Name">
+						<p:cellEditor>
+							<f:facet name="output"><h:outputText value="#{product.prodName}"/></f:facet>
+							<f:facet name="input"><p:inputText value="#{product.prodName}" label="Name"/></f:facet>
+						</p:cellEditor>
+					</p:column>
+	
+					<p:column headerText="Description">
+						<p:cellEditor>
+							<f:facet name="output"><h:outputText value="#{product.prodDescription}"/></f:facet>
+							<f:facet name="input"><p:inputText value="#{product.prodDescription}" label="Description"/></f:facet>
+						</p:cellEditor>
+					</p:column>
+	
+					<p:column headerText="Quantity">
+						<p:cellEditor>
+							<f:facet name="output"><h:outputText value="#{product.prodQuantity}"/></f:facet>
+							<f:facet name="input"><p:inputText value="#{product.prodQuantity}" label="Quantity"/></f:facet>
+						</p:cellEditor>
+					</p:column>
+	
+					<p:column headerText="Value Unitary">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{product.prodUnitaryValue}" >
+									<f:convertNumber type="currency" pattern="EUR #0.00" currencySymbol="EUR" locale="en_GB" />
+								</h:outputText>
+							</f:facet>
+							<f:facet name="input"><p:inputText value="#{product.prodUnitaryValue}" label="Value Unitary"/></f:facet>
+						</p:cellEditor>
+					</p:column>
+	
+					<p:column headerText="Date">
+						<f:facet name="headerText">Date</f:facet>
+						<h:outputText value="#{product.prodEditionDate.time}">
+							<f:convertDateTime pattern="dd/MM/yyyy"
+								timeZone="Europe/Dublin" />
+						</h:outputText>
+					</p:column>
+	
+					<p:column headerText="Category">
+						<p:cellEditor>
+	               			<f:facet name="output"><h:outputText value="#{product.category.catgName}" /></f:facet>
+	               			<f:facet name="input">
+		                   		<h:selectOneMenu value="#{productBean.product.category}" style="width:100%" converter="categoryConverter">
+		                       		<f:selectItems value="#{productBean.categories}" var="catg" itemLabel="#{catg.catgName}" itemValue="#{catg}" />
+		                   		</h:selectOneMenu>
+	               			</f:facet>
+						</p:cellEditor>
+					</p:column>
+	
+					<p:column style="width:32px">
+						<p:rowEditor />
+	       			</p:column>
+	
+					<p:column style="width:32px">
+						<p:commandLink styleClass="ui-icon ui-icon-trash" action="#{productBean.remove(product)}"  update="productsTable"/>						
+					</p:column>
+					
+				</p:dataTable>
+			</h:form>
 		</ui:define>
 	</ui:composition>
 </html>

@@ -7,7 +7,11 @@ import ie.com.deborah.inventory.model.Product;
 
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
+
+import org.primefaces.event.RowEditEvent;
 
 /**
  * @author Deborah Lima
@@ -37,4 +41,20 @@ public class ProductBean {
 	public List<Product> getProducts(){
 		return dao.products();
 	}
+	
+	public void remove(Product product){
+		dao.remove(product);
+	}
+	
+	public void onRowEdit(RowEditEvent event) {
+		Product prod = (Product) event.getObject();
+		dao.persiste(prod);
+        FacesMessage msg = new FacesMessage("Product Edited", ((Product) event.getObject()).getProdName());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+     
+    public void onRowCancel(RowEditEvent event) {
+    	FacesMessage msg = new FacesMessage("Edit Cancelled", ((Product) event.getObject()).getProdName());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
 }
