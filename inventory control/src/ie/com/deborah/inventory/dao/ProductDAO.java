@@ -41,4 +41,11 @@ private EntityManager em = new JPAManager().getEntityManager();
 		return products;
 	}
 
+	public void remove(Product product){
+
+		em.getTransaction().begin();
+		em.remove(product);
+		em.getTransaction().commit();
+
+	}
 }

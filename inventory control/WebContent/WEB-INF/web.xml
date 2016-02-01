@@ -14,4 +14,7 @@
   	<param-name>primefaces.THEME</param-name>
   	<param-value>redmond</param-value> 
   </context-param>
+  <welcome-file-list>
+  	<welcome-file>product.xhtml</welcome-file>
+  </welcome-file-list>
 </web-app>
